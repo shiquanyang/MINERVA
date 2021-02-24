@@ -1,5 +1,7 @@
 import numpy as np
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 
 class Agent(object):
@@ -13,7 +15,7 @@ class Agent(object):
         self.ePAD = tf.constant(params['entity_vocab']['PAD'], dtype=tf.int32)
         self.rPAD = tf.constant(params['relation_vocab']['PAD'], dtype=tf.int32)
         if params['use_entity_embeddings']:
-            self.entity_initializer = tf.contrib.layers.xavier_initializer()
+            self.entity_initializer = tf.keras.initializers.glorot_normal()
         else:
             self.entity_initializer = tf.zeros_initializer()
         self.train_entities = params['train_entity_embeddings']
@@ -40,7 +42,7 @@ class Agent(object):
             self.relation_lookup_table = tf.get_variable("relation_lookup_table",
                                                          shape=[self.action_vocab_size, 2 * self.embedding_size],
                                                          dtype=tf.float32,
-                                                         initializer=tf.contrib.layers.xavier_initializer(),
+                                                         initializer=tf.keras.initializers.glorot_normal(),
                                                          trainable=self.train_relations)
             self.relation_embedding_init = self.relation_lookup_table.assign(self.action_embedding_placeholder)
 
@@ -57,8 +59,8 @@ class Agent(object):
         with tf.variable_scope("policy_step"):
             cells = []
             for _ in range(self.LSTM_Layers):
-                cells.append(tf.contrib.rnn.LSTMCell(self.m * self.hidden_size, use_peepholes=True, state_is_tuple=True))
-            self.policy_step = tf.contrib.rnn.MultiRNNCell(cells, state_is_tuple=True)
+                cells.append(tf.compat.v1.nn.rnn_cell.LSTMCellself.m * self.hidden_size, use_peepholes=True, state_is_tuple=True))
+            self.policy_step = tf.compat.v1.nn.rnn_cell.MultiRNNCell(cells, state_is_tuple=True)
 
     def get_mem_shape(self):
         return (self.LSTM_Layers, 2, None, self.m * self.hidden_size)
