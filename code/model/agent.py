@@ -59,7 +59,7 @@ class Agent(object):
         with tf.variable_scope("policy_step"):
             cells = []
             for _ in range(self.LSTM_Layers):
-                cells.append(tf.compat.v1.nn.rnn_cell.LSTMCellself.m * self.hidden_size, use_peepholes=True, state_is_tuple=True)
+                cells.append(tf.compat.v1.nn.rnn_cell.LSTMCell(self.m * self.hidden_size, use_peepholes=True, state_is_tuple=True))
             self.policy_step = tf.compat.v1.nn.rnn_cell.MultiRNNCell(cells, state_is_tuple=True)
 
     def get_mem_shape(self):
