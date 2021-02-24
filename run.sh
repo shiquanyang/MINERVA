@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source $1
-echo $1
+echo $base_output_dir
 export PYTHONPATH="."
 gpu_id=1
 cmd="python ./code/model/trainer.py --base_output_dir $base_output_dir --path_length $path_length --hidden_size $hidden_size --embedding_size $embedding_size \
